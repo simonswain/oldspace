@@ -1,0 +1,16 @@
+{
+  "name": "starsjs",
+  "version": "0.0.0",
+  "description": "",
+  "main": "run.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Simon Swain <simon@simonswain.com> (http://simonswain.com/)",
+  "license": "MIT",
+  "dependencies": {
+    "underscore": "~1.6.0",
+    "backbone": "~1.1.2",
+    "random-to": "0.0.2"
+  }
+}
