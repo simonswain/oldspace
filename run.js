@@ -31,8 +31,13 @@ var Universe = Backbone.Model.extend({
 
     this.assignHomes();
 
-    this.makeG();
-    this.render();
+    this.listenTo(this.systems, 'change', function(e){
+      console.log('change');
+    });
+    
+
+    //this.makeG();
+    //this.render();
 
     console.log('=== Universe has ' + this.empires.length + ' Empires');
     console.log('                 ' + this.systems.length + ' Systems');
@@ -41,9 +46,13 @@ var Universe = Backbone.Model.extend({
       return a;
     }, 0) + ' Planets');
 
+
+
+
   },
 
   render: function(){
+    return;
     process.stdout.write('\u001B[2J\u001B[0;0f');
     this.renderSystems();
     console.log(new Date());
@@ -69,11 +78,11 @@ var Universe = Backbone.Model.extend({
     this.systems.each(function(system){
       console.log( ' * ' + system.get('name'))
       system.planets.each(function(planet){
-        console.log( '   . ' + planet.get('name') + '   cr ' + planet.get('credit'))
+        console.log( '   . ' + planet.get('name') + '   cr ' + planet.get('credit'), JSON.stringify(planet.toJSON()))
       });
 
       system.ships.each(function(ship){
-        console.log( '   > ' + ship.empire.get('name'))
+        console.log( '   > ' + ship.empire.get('name'), JSON.stringify(ship.toJSON()))
       });
 
     });
@@ -165,3 +174,7 @@ var Universe = Backbone.Model.extend({
 });
 
 var universe = new Universe();
+
+var server = require('./server')(universe);
+
+

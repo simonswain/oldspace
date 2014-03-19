@@ -4,6 +4,7 @@ var _ = require('underscore')._;
 var Backbone = require('backbone');
 
 var random = require('random-to');
+var uuid = require('node-uuid');
 
 var App;
 App = {
@@ -14,14 +15,14 @@ App = {
 var Empire = module.exports = Backbone.Model.extend({
   defaults: { 
     'id': null,
-    'name':'Unknown',
-    'radius': 1000,
-    'age': 0,
-    'x':null,
-    'y':null
+    'name':'Unknown Empire'
   },
   initialize: function() {
     _.bindAll(this, 'addSystem','removeSystem');
+
+    this.set({
+      id: uuid.v4()
+    });
 
     this.systems = new App.Collections.Systems();
     this.ships = new App.Collections.Ships();

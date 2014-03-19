@@ -4,6 +4,7 @@ var _ = require('underscore')._;
 var Backbone = require('backbone');
 
 var random = require('random-to');
+var uuid = require('node-uuid');
 
 var App;
 App = {
@@ -13,7 +14,7 @@ App = {
 
 var Planet = module.exports = Backbone.Model.extend({
   defaults: { 
-    'name':'Unknown', 
+    'name':'Unknown Planet', 
     'age': 0,
     'interval': 1000,
     'x':null,
@@ -28,6 +29,7 @@ var Planet = module.exports = Backbone.Model.extend({
     _.bindAll(this, 'run','stop');
 
     this.set({
+      id: uuid.v4(),
       interval: 1000 + random.from0to(5000),
       pop: 1000 * random.from1to(10),
       size: 1000 * random.from1to(10),
@@ -50,7 +52,7 @@ var Planet = module.exports = Backbone.Model.extend({
   },
   run: function(){
     if (  this.system.empire ){
-    console.log(this.system.get('name') + ':' + this.get('name') + '>' + this.system.empire.get('name') + ' - credit: ', this.get('credit'));
+    console.log(this.system.get('name') + ':' + this.get('id') + ' ' + this.get('name') + '>' + this.system.empire.get('name') + ' - credit: ', this.get('credit'));
     }
 2
     //JSON.stringify(this.toJSON())
@@ -71,6 +73,11 @@ var Planet = module.exports = Backbone.Model.extend({
   },
   spawnShip: function(){
 
+    var x, y;
+    
+    x = random.from0upto(this.system.get('radius'));
+    y = random.from0upto(this.system.get('radius'));
+
     // calculate desired ship
     var shipcost = this.shopcost;
 
@@ -81,6 +88,8 @@ var Planet = module.exports = Backbone.Model.extend({
     console.log(' @ Spawn ' + this.system.get('name') + ':' + this.get('name') + ':' + this.system.empire.get('name'));
 
     var ship = new App.Models.Ship({
+      x:this.get('x'),
+      y:this.get('y')
     }, {
       empire: this.system.empire,
       planet: this

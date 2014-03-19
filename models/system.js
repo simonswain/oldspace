@@ -4,6 +4,7 @@ var _ = require('underscore')._;
 var Backbone = require('backbone');
 
 var random = require('random-to');
+var uuid = require('node-uuid');
 
 var App;
 App = {
@@ -14,7 +15,7 @@ App = {
 var System = module.exports = Backbone.Model.extend({
   defaults: { 
     'id': null,
-    'name':'Unknown',
+    'name':'Unknown System',
     'radius': 1000,
     'age': 0,
     'x':null,
@@ -23,13 +24,17 @@ var System = module.exports = Backbone.Model.extend({
   initialize: function() {
     _.bindAll(this, 'addPlanet','initPlanets');
 
+    this.set({
+      id: uuid.v4()
+    });
+
     this.planetCount = random.from1to(3);
 
     this.planets = new App.Collections.Planets();
     this.ships = new App.Collections.Ships();
 
     this.initPlanets();
-    console.log( ' * ' + this.get('name') + ' has ' + this.planets.length + ' planets')
+    console.log( ' * ' + ' ' + this.get('name') + ' has ' + this.planets.length + ' planets')
 
   },
   initPlanets: function(){
