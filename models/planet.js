@@ -39,13 +39,9 @@ var Planet = module.exports = Backbone.Model.extend({
 
     this.system = opts.system;
     this.empire = null;
-
     this.ships = new App.Collections.Ships();
-
     this.shopcost = 25;
-    
     this.timer = false;
-
     console.log(' - ' + this.system.get('name') + ':' + this.get('name'));
 
     this.run();
@@ -56,11 +52,17 @@ var Planet = module.exports = Backbone.Model.extend({
     }
 2
     //JSON.stringify(this.toJSON())
+
+
+    if(this.system.empire && this.system.ships.length === 0){
+      this.spawnShip();
+    }
+
     if(this.system.empire && this.get('credit') > this.shopcost){
       this.spawnShip();
     }
 
-    // calculate earnings from planet
+    // Calculate earnings from planet
     var earnings = random.from0to(5);
 
     this.set({
@@ -88,18 +90,18 @@ var Planet = module.exports = Backbone.Model.extend({
     console.log(' @ Spawn ' + this.system.get('name') + ':' + this.get('name') + ':' + this.system.empire.get('name'));
 
     var ship = new App.Models.Ship({
-      x:this.get('x'),
-      y:this.get('y')
+      state: 'system',
+      ux: this.system.get('x'),
+      uy: this.system.get('y'),
+      x: x,
+      y: y
     }, {
       empire: this.system.empire,
       planet: this
     })
-
     this.ships.add(ship);
     this.system.ships.add(ship);
     this.system.empire.ships.add(ship);
-
-    console.log(this.system.empire.ships.length);
 
   },
   stop: function(){

@@ -23,7 +23,7 @@ var Universe = Backbone.Model.extend({
     this.empires = new App.Collections.Empires([]);
     this.initEmpires();
 
-    this.systemCount = this.empires.length;
+    //this.systemCount = this.empires.length;
     this.systemCount = this.empires.length + 5 + random.from1to(5);
     
     this.systems = new App.Collections.Systems([]);
@@ -45,9 +45,6 @@ var Universe = Backbone.Model.extend({
       a = a + system.planets.length;
       return a;
     }, 0) + ' Planets');
-
-
-
 
   },
 
@@ -176,5 +173,3 @@ var Universe = Backbone.Model.extend({
 var universe = new Universe();
 
 var server = require('./server')(universe);
-
-

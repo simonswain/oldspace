@@ -19,6 +19,24 @@ body {
     
 }
 
+.jump {
+    position: absolute;
+    top: 16px;
+    right: 51%;
+    bottom: 16px;
+    left: 16px;
+    border: 1px solid #222; 
+}
+
+.jump .ship {
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 0, 0, 1);
+    border-radius: 8px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 
 .system {
     width: 80px;
@@ -27,6 +45,18 @@ body {
     color: #fff;
     text-align: center;
     border-radius: 40px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-left: 40px;
+    margin-top: 40px;
+}
+
+.system .ship {
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 0, 0, 1);
+    border-radius: 8px;
     position: absolute;
     top: 0;
     left: 0;
@@ -68,8 +98,8 @@ body {
 
 
 .map .planet {
-    width: 16px;
-    height: 16px;
+    width: 8px;
+    height: 8px;
     background: #fff;
     color: red;
     text-align: center;

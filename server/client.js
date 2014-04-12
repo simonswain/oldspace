@@ -3,6 +3,7 @@ $(function(){
   Space = {
     universe: new App.Models.Universe(),
     systems: new App.Collections.Systems(),
+    ships: new App.Collections.Ships(),
     empires: new App.Collections.Empires()
   };
 
@@ -10,6 +11,11 @@ $(function(){
     map: new App.Views.Map({
       el: $('.map'),
       Space: Space
+    }),
+    jump: new App.Views.Jump({
+      el: $('.jump'),
+      space: space,
+      ships: ships
     }),
     systems: new App.Views.SystemsData({
       el: $('<table />').appendTo('.data .systems'),
@@ -19,8 +25,6 @@ $(function(){
       el: $('<table />').appendTo('.data .empires'),
       Space: Space
     })
-
-
   };
 
 });
@@ -73,6 +77,17 @@ sock.onmessage = function(e) {
     });
   }
 
+  if(data.hasOwnProperty('ships')){
+    _.each(data.ships, function(x){
+      if(Space.ships.get(x.id)){
+        var t = Space.ships.get(x.id);
+        t.set(x);
+      } else {
+        Space.ships.add([new App.Models.Ship(x)]);
+      }
+    });
+  }
+
   //console.log('message', JSON.parse(e.data), e );
 };
 
@@ -105,6 +120,8 @@ App.Models.Ship = Backbone.Model.extend({
   defaults: { 
     id: null,
     name:'Unknown Ship', 
+    ux: null,
+    uy: null,
     x:null,
     y:null,
     vx: 0,
@@ -327,6 +344,71 @@ App.Views.Map = Backbone.View.extend({
     this.stopListening();
   },
   render : function() {
+    _.each(this.views, function(x){
+      x.close();
+    });
+    $(this.el).html('');
+    this.addAll();
+    return this;
+  },
+  addAll: function(){
+    var self = this;
+    this.Space.systems.each(function(x){
+      self.add(x);
+    });
+  },
+  add: function(x){
+    var el = $('<div class="system" />')
+      .appendTo($(this.el))
+    .css({
+      left: x.get('x') * this.scale,
+      top: x.get('y') * this.scale
+    })
+    var system = new App.Views.System({
+      Space: this.Space,
+      scale: this.scale,
+      model: x,
+      el: el
+    });
+    //this.views.push(system);
+  }
+});
+
+
+App.Views.Jump = Backbone.View.extend({
+  initialize : function(opts) {
+    var self = this;
+    _.bindAll(this, 'onClose', 'render','add','addAll');
+    this.delegateEvents();
+    this.views = [];
+    this.space = opts.space;
+    this.ships = opts.ships;
+    this.listenTo(this.ships,'change reset add remove', this.render);
+
+    console.log('R');
+    this.render();
+    
+    var r = $(this.el).width();
+    var h = $(this.el).height();
+    if (h < r) {
+      r = h;
+    }
+
+    this.scale = r / this.space.universe.get('radius');
+
+  },
+  events: {
+  },
+  onClose: function(){
+    var self = this;
+    _.each(this.views, function(x){
+      x.close();
+    });
+    this.stopListening();
+  },
+  render : function() {
+    console.log(this.ships.toJSON());
+    return;
     _.each(this.views, function(x){
       x.close();
     });
