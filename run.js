@@ -157,8 +157,8 @@ var Universe = Backbone.Model.extend({
 
     var x, y;
     
-    x = random.from0upto(this.get('radius'));
-    y = random.from0upto(this.get('radius'));
+    x = random.from0upto(this.get('radius') * 0.8) + (this.get('radius') * 0.1);
+    y = random.from0upto(this.get('radius') * 0.8) + (this.get('radius') * 0.1);
 
     var system = new App.Models.System({
       x:x,

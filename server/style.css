@@ -11,12 +11,31 @@ body {
 .map {
     position: absolute;
     top: 16px;
-    right: 51%;
+    right: 16px;
     bottom: 16px;
     left: 16px;
     border: 1px solid #222;
-    background: #111;
-    
+}
+
+.orbits {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
+    border: 1px solid #222;
+}
+
+.data {
+    display: none;
+}
+
+.ships {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    bottom: 16px;
+    left: 16px;
 }
 
 .jump {
@@ -25,7 +44,6 @@ body {
     right: 51%;
     bottom: 16px;
     left: 16px;
-    border: 1px solid #222; 
 }
 
 .jump .ship {
