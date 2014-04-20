@@ -13,11 +13,10 @@ App = {
 };
 
 var System = module.exports = Backbone.Model.extend({
-  defaults: { 
+  defaults: {
     'id': null,
     'name':'Unknown System',
     'radius': 1000,
-    'age': 0,
     'x':null,
     'y':null
   },
@@ -46,10 +45,34 @@ var System = module.exports = Backbone.Model.extend({
   },
 
   addPlanet: function(i){
+
+    var self = this;
+
     var x, y;
-    
-    x = (this.get('radius') * 0.3) + random.from0upto(this.get('radius') * 0.4);
-    y = (this.get('radius') * 0.3) + random.from0upto(this.get('radius') * 0.4);
+    var d;
+    var spacing = this.get('radius') * 0.3;
+
+    var gen = function(){
+      return (self.get('radius') * 0.3) + random.from0upto(self.get('radius') * 0.4);
+    };
+
+
+    d = 0;
+
+    if(this.planets.length === 0){
+      x = gen();
+      y = gen();
+    }
+
+    while (this.planets.length > 0 && d < spacing){
+      x = gen();
+      y = gen();
+      this.planets.each(function(p){
+        var dx = Math.abs(p.get('x') - x);
+        var dy = Math.abs(p.get('y') - y);
+        d = Math.sqrt((dx*dx) + (dy*dy));
+      });
+    }
 
     var planet = new App.Models.Planet({
       x:x,

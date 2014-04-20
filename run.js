@@ -17,7 +17,7 @@ App = {
 
 var Universe = Backbone.Model.extend({
   defaults: {
-    radius: 25,
+    radius: 256,
   },
 
   initialize: function(){
@@ -34,11 +34,6 @@ var Universe = Backbone.Model.extend({
     this.initSystems();
 
     this.assignHomes();
-
-    this.listenTo(this.systems, 'change', function(e){
-      console.log('change');
-    });
-    
 
     //this.makeG();
     this.render();
@@ -76,14 +71,14 @@ var Universe = Backbone.Model.extend({
 
     console.log();
     this.systems.each(function(system){
-      console.log( ' * ' + system.get('name'))
+      console.log( ' * ' + system.get('name') + '   ' + JSON.stringify(system.toJSON()))
       system.planets.each(function(planet){
-        console.log( '   . ' + planet.get('name') + '   cr ' + planet.get('credit'), JSON.stringify(planet.toJSON()))
+        console.log( '   . ' + planet.get('name') + '   ships ' + planet.ships.length, JSON.stringify(planet.toJSON()))
       });
 
-      system.ships.each(function(ship){
-        console.log( '   > ' + ship.empire.get('name'), JSON.stringify(ship.toJSON()))
-      });
+      // system.ships.each(function(ship){
+      //   console.log( '   > ' + ship.empire.get('name'), JSON.stringify(ship.toJSON()))
+      // });
 
     });
 
@@ -158,10 +153,35 @@ var Universe = Backbone.Model.extend({
 
   addSystem: function(){
 
+    var self = this;
+
     var x, y;
-    
-    x = random.from0upto(this.get('radius') * 0.8) + (this.get('radius') * 0.1);
-    y = random.from0upto(this.get('radius') * 0.8) + (this.get('radius') * 0.1);
+    var d;
+    var spacing = this.get('radius') * 0.3;
+
+    var gen = function(){
+      return Math.floor((self.get('radius') * 0.1) + random.from0upto(self.get('radius') * 0.8));
+    };
+
+    d = 0;
+
+    if(this.systems.length === 0){
+      x = gen();
+      y = gen();
+    }
+
+    while (this.systems.length > 0 && d < spacing){
+      x = gen();
+      y = gen();
+      this.systems.each(function(s){
+        var dx = Math.abs(s.get('x') - x);
+        var dy = Math.abs(s.get('y') - y);
+        d = Math.sqrt((dx*dx) + (dy*dy));
+        console.log(d);
+      });
+    }
+
+    console.log(d, spacing);
 
     var system = new App.Models.System({
       x:x,

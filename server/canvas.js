@@ -82,7 +82,7 @@ $(function(){
 
     var maxRadius = 1000;
 
-    var cradius = 80;
+    var cradius = 64;
     var ctx = {};
      ctx.map = Views.map.ctx;
      ctx.orbits = Views.orbits.ctx;
@@ -170,8 +170,6 @@ $(function(){
 
 
   setInterval(Render.map, 100);
-  //setInterval(Render.jump, 1000);
-
 
   Render.systems = function(){
 
