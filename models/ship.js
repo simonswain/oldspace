@@ -148,13 +148,13 @@ var Ship = module.exports = Backbone.Model.extend({
     var radius;
     radius = this.system.get('radius');
 
-    x = ship.get('x');
-    y = ship.get('y');
+    x = Number(ship.get('x'));
+    y = Number(ship.get('y'));
 
-    vx = ship.get('vx');
-    vy = ship.get('vy');
+    vx = Number(ship.get('vx'));
+    vy = Number(ship.get('vy'));
 
-    thrust = ship.get('thrust');
+    thrust = Number(ship.get('thrust'));
 
     _.each(
       this.system.planets.models, 
@@ -220,8 +220,8 @@ var Ship = module.exports = Backbone.Model.extend({
     vx = vx * 0.92;
     vy = vy * 0.92;
 
-    x = x + vx;
-    y = y + vy;
+    x = x + Number(vx);
+    y = y + Number(vy);
 
     if ( x < (inner * 0.1) ) {
       x = (inner * 0.1);
@@ -251,11 +251,11 @@ var Ship = module.exports = Backbone.Model.extend({
     // ship.energypc = ( 100 / ship.energy_max ) * ship.energy;
     // ship.energyf = ( 1 / ship.energy_max ) * ship.energy;
     ship.set({
-      x: x,
-      y: y,
-      vx: vx,
-      vy: vy,
-      a: a
+      x: x.toFixed(2),
+      y: y.toFixed(2),
+      vx: vx.toFixed(2),
+      vy: vy.toFixed(2),
+      a: a.toFixed(2)
     });
   }
 

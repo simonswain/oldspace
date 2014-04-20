@@ -16,7 +16,7 @@ var Planet = module.exports = Backbone.Model.extend({
   defaults: { 
     'name':'Unknown Planet', 
     'age': 0,
-    'interval': 1000,
+    'interval': 100,
     'x':null,
     'y':null,
     size: 100,
@@ -48,7 +48,7 @@ var Planet = module.exports = Backbone.Model.extend({
   },
   run: function(){
     if (  this.system.empire ){
-    console.log(this.system.get('name') + ':' + this.get('id') + ' ' + this.get('name') + '>' + this.system.empire.get('name') + ' - credit: ', this.get('credit'));
+      //console.log(this.system.get('name') + ':' + this.get('id') + ' ' + this.get('name') + '>' + this.system.empire.get('name') + ' - credit: ', this.get('credit'));
     }
 2
     //JSON.stringify(this.toJSON())

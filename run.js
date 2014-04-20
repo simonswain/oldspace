@@ -5,6 +5,10 @@ var Backbone = require('backbone');
 
 var random = require('random-to');
 
+var cls = function(){
+  process.stdout.write('\u001B[2J\u001B[0;0f');
+};
+
 var App;
 App = {
   Models: require('./models'),
@@ -23,8 +27,8 @@ var Universe = Backbone.Model.extend({
     this.empires = new App.Collections.Empires([]);
     this.initEmpires();
 
-    //this.systemCount = this.empires.length;
     this.systemCount = this.empires.length + 5 + random.from1to(5);
+    //this.systemCount = this.empires.length;
     
     this.systems = new App.Collections.Systems([]);
     this.initSystems();
@@ -37,7 +41,7 @@ var Universe = Backbone.Model.extend({
     
 
     //this.makeG();
-    //this.render();
+    this.render();
 
     console.log('=== Universe has ' + this.empires.length + ' Empires');
     console.log('                 ' + this.systems.length + ' Systems');
@@ -49,9 +53,8 @@ var Universe = Backbone.Model.extend({
   },
 
   render: function(){
-    return;
-    process.stdout.write('\u001B[2J\u001B[0;0f');
-    this.renderSystems();
+    cls();
+    //this.renderSystems();
     console.log(new Date());
 
     console.log('=== Universe has ' + this.empires.length + ' Empires');
@@ -173,3 +176,4 @@ var Universe = Backbone.Model.extend({
 var universe = new Universe();
 
 var server = require('./server')(universe);
+

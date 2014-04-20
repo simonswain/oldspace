@@ -82,7 +82,7 @@ $(function(){
 
     var maxRadius = 1000;
 
-    var cradius = 08;
+    var cradius = 80;
     var ctx = {};
      ctx.map = Views.map.ctx;
      ctx.orbits = Views.orbits.ctx;
@@ -135,14 +135,16 @@ $(function(){
       _.each(system.planets, function(planet){
         ctx.map.beginPath();
         ctx.map.arc(localX(planet.x), localY(planet.y), 4, 0, 2 * Math.PI, false);
-        ctx.map.fillStyle = '#fff';
+        ctx.map.fillStyle = '#090';
         ctx.map.fill();
       });
 
       _.each(system.ships, function(ship){
+        var x = Number(ship.x);
+        var y = Number(ship.y);
         ctx.orbits.beginPath();
-        ctx.orbits.arc(localX(ship.x), localY(ship.y), 2, 0, 2 * Math.PI, false);
-        ctx.orbits.fillStyle = '#c00';
+        ctx.orbits.arc(localX(x), localY(y), 2, 0, 2 * Math.PI, false);
+        ctx.orbits.fillStyle = '#f00';
         ctx.orbits.fill();
       });
 
@@ -167,7 +169,7 @@ $(function(){
   };
 
 
-  setInterval(Render.map, 1000);
+  setInterval(Render.map, 100);
   //setInterval(Render.jump, 1000);
 
 

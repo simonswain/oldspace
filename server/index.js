@@ -104,7 +104,7 @@ module.exports = function(universe){
     console.log('CHANGE');
   });
 
-  setInterval(announce, 1000);
+  setInterval(announce, 100);
 
 
   console.log(' [*] Listening on 0.0.0.0:9999' );

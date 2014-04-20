@@ -35,7 +35,7 @@ var System = module.exports = Backbone.Model.extend({
     this.ships = new App.Collections.Ships();
 
     this.initPlanets();
-    console.log( ' * ' + ' ' + this.get('name') + ' has ' + this.planets.length + ' planets')
+    //console.log( ' * ' + ' ' + this.get('name') + ' has ' + this.planets.length + ' planets')
 
   },
 
