@@ -13,6 +13,7 @@
     "backbone": "~1.1.2",
     "random-to": "0.0.2",
     "node-static": "~0.7.3",
-    "sockjs": "~0.3.8"
+    "sockjs": "~0.3.8",
+    "node-uuid": "~1.4.1"
   }
 }
