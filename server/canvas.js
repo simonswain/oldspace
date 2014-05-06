@@ -1,50 +1,56 @@
-var Space;
-
-Space = {
-  universe: null,
-  systems: [],
-  ships: [],
-  empires: []
-};
-
-var App;
-var Views;
-
-
-var sock = new SockJS('http://localhost:9999/broadcast');
-
-sock.onopen = function() {
-};
-
-sock.onmessage = function(e) {
-  var data = JSON.parse(e.data);
-
-  if(data.hasOwnProperty('universe')){
-    Space.universe = data.universe;
-  }
-
-  if(data.hasOwnProperty('systems')){
-    Space.systems = data.systems;
-  }
-
-  if(data.hasOwnProperty('empires')){
-    Space.empires = data.empires;
-  }
-
-  if(data.hasOwnProperty('ships')){
-    Space.ships = data.ships;
-  }
-
-};
-
-
-sock.onclose = function() {
-};
-
-
 $(function(){
+  var space = new DeepSpaceDataClient();
+  var ui = new DeepSpaceUI(space);
+});
 
-  Views = {
+var DeepSpaceDataClient = function(){
+
+  var space, sock;
+
+  space = {
+    universe: null,
+    systems: [],
+    ships: [],
+    empires: []
+  };
+
+  sock = new SockJS('http://localhost:9999/broadcast');
+
+  sock.onopen = function() {
+  };
+
+  sock.onmessage = function(e) {
+    var data = JSON.parse(e.data);
+
+    if(data.hasOwnProperty('universe')){
+      space.universe = data.universe;
+    }
+
+    if(data.hasOwnProperty('systems')){
+      space.systems = data.systems;
+    }
+
+    if(data.hasOwnProperty('empires')){
+      space.empires = data.empires;
+    }
+
+    if(data.hasOwnProperty('ships')){
+      space.ships = data.ships;
+    }
+  };
+
+  sock.onclose = function() {
+  };
+
+  return space;
+
+}
+
+var DeepSpaceUI = function(space){
+
+  var views;
+
+  views = {
     ships: {
       el: $('.ships'),
     },
@@ -69,26 +75,26 @@ $(function(){
     }
   };
 
-  Views.map.el.html('<canvas id="map" width="' + Views.map.w + '" height="' + Views.map.h + '" />');
-  Views.map.ctx = document.getElementById("map").getContext("2d");
+  views.map.el.html('<canvas id="map" width="' + views.map.w + '" height="' + views.map.h + '" />');
+  views.map.ctx = document.getElementById("map").getContext("2d");
 
-  Views.orbits.el.html('<canvas id="orbits" width="' + Views.orbits.w + '" height="' + Views.orbits.h + '" />');
-  Views.orbits.ctx = document.getElementById("orbits").getContext("2d");
+  views.orbits.el.html('<canvas id="orbits" width="' + views.orbits.w + '" height="' + views.orbits.h + '" />');
+  views.orbits.ctx = document.getElementById("orbits").getContext("2d");
 
 
-  var Render = {};
+  var render = {};
 
-  Render.map = function(){
+  render.map = function(){
 
     var maxRadius = 1000;
 
     var cradius = 64;
     var ctx = {};
-     ctx.map = Views.map.ctx;
-     ctx.orbits = Views.orbits.ctx;
+    ctx.map = views.map.ctx;
+    ctx.orbits = views.orbits.ctx;
 
-    var w = Views.map.w;
-    var h = Views.map.h;
+    var w = views.map.w;
+    var h = views.map.h;
 
     //ctx.map.fillStyle = "rgba(0, 0, 0, 0)";
     ctx.map.clearRect(0, 0, w, h);
@@ -96,13 +102,13 @@ $(function(){
     ctx.orbits.fillStyle = "rgba(0, 0, 0, .25)";
     ctx.orbits.fillRect(0, 0, w, h);
 
-    var rx = Views.map.el.width();
-    var ry = Views.map.el.height();
+    var rx = views.map.el.width();
+    var ry = views.map.el.height();
 
-    this.scalex = (rx / Space.universe.radius);
-    this.scaley = (ry / Space.universe.radius);
+    this.scalex = (rx / space.universe.radius);
+    this.scaley = (ry / space.universe.radius);
 
-    _.each(Space.systems, function(system){
+    _.each(space.systems, function(system){
 
       var x = system.x * this.scalex;
       var y = system.y * this.scaley;
@@ -111,7 +117,7 @@ $(function(){
       var localX = function(v){
         // system x to ctx x
         return x + ((radius / system.radius) * v);
-       };
+      };
 
       var localY = function(v){
         // system y to ctx y
@@ -151,15 +157,15 @@ $(function(){
     });
   };
 
-  Render.jump = function(){
+  render.jump = function(){
 
-    var r = Views.jump.el.width();
-    var scale = (r / Space.universe.radius) * 0.8;
-    Views.jump.el.html('');
-    _.each(Space.ships, function(ship){
+    var r = views.jump.el.width();
+    var scale = (r / space.universe.radius) * 0.8;
+    views.jump.el.html('');
+    _.each(space.ships, function(ship){
       var el = $('<div />')
         .addClass('ship')
-        .appendTo($(Views.jump.el))
+        .appendTo($(views.jump.el))
         .css({
           left: ship.ux * scale,
           top: ship.uy * scale
@@ -169,9 +175,9 @@ $(function(){
   };
 
 
-  setInterval(Render.map, 100);
+  setInterval(render.map, 100);
 
-  Render.systems = function(){
+  render.systems = function(){
 
     var template = _.template('<td><%= name %></td>\
 <td class="planets"></td>');
@@ -181,11 +187,11 @@ $(function(){
 <td class="credit">Cr <%= credit %></td>\
 </tr>');
 
-    Views.systems.el.html('');
+    views.systems.el.html('');
 
-    _.each(Space.systems, function(system){
+    _.each(space.systems, function(system){
 
-      var el = $('<tr class="" />').appendTo($(Views.systems.el));
+      var el = $('<tr class="" />').appendTo($(views.systems.el));
       el.html(template(system));
 
 
@@ -197,10 +203,10 @@ $(function(){
     });
   };
 
-  //setInterval(Render.systems, 1000);
+  //setInterval(render.systems, 1000);
 
 
-  Render.empires = function(){
+  render.empires = function(){
 
     var template = _.template('<td><%= name %></td>\
 <td class="empireShips"><%= ships.length %></td>');
@@ -211,11 +217,11 @@ $(function(){
 <td><%= y.toFixed(2) %></td>\
 </tr>');
 
-    Views.empires.el.html('');
+    views.empires.el.html('');
 
-    _.each(Space.empires, function(empire){
+    _.each(space.empires, function(empire){
 
-      var el = $('<tr class="" />').appendTo($(Views.empires.el));
+      var el = $('<tr class="" />').appendTo($(views.empires.el));
       el.html(template(empire));
 
       var pel = $('<table />').appendTo(el.find('.empireShips'));
@@ -227,7 +233,6 @@ $(function(){
     });
   };
 
-  //setInterval(Render.empires, 1000);
+  //setInterval(render.empires, 1000);
 
-
-});
+};
