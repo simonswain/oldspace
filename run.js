@@ -29,7 +29,7 @@ var Universe = Backbone.Model.extend({
 
     this.systemCount = this.empires.length + 5 + random.from1to(5);
     //this.systemCount = this.empires.length;
-    
+
     this.systems = new App.Collections.Systems([]);
     this.initSystems();
 
@@ -139,11 +139,11 @@ var Universe = Backbone.Model.extend({
   initSystems: function(){
     // create system for each empire
     var self = this;
-    this.empires.each( 
+    this.empires.each(
       function(empire){
         empire.addSystem(self.addSystem());
       });
-    
+
     // create rest of systems
     while(this.systems.length < this.systemCount){
       this.addSystem();

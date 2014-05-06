@@ -13,8 +13,8 @@ App = {
 };
 
 var Planet = module.exports = Backbone.Model.extend({
-  defaults: { 
-    'name':'Unknown Planet', 
+  defaults: {
+    'name':'Unknown Planet',
     'age': 0,
     'interval': 100,
     'x':null,
@@ -59,7 +59,6 @@ var Planet = module.exports = Backbone.Model.extend({
     this.run();
   },
   run: function(){
-
     // population growth
 
     // population death
@@ -67,9 +66,9 @@ var Planet = module.exports = Backbone.Model.extend({
     // population consumes ag
 
     // industry consumes raw
-    
+
     // industry produces goods
-    
+
     // ships take pop and colonizes
 
     // ships take ag, raw, goods and sell. profit goes to this planet
@@ -103,7 +102,7 @@ var Planet = module.exports = Backbone.Model.extend({
   spawnShip: function(){
 
     var x, y;
-    
+
     x = random.from0upto(this.system.get('radius'));
     y = random.from0upto(this.system.get('radius'));
 
