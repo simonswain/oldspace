@@ -33,8 +33,6 @@ var Universe = Backbone.Model.extend({
     this.systems = new App.Collections.Systems([]);
     this.initSystems();
 
-    this.assignHomes();
-
     //this.makeG();
     this.render();
 
@@ -123,13 +121,6 @@ var Universe = Backbone.Model.extend({
     }
   },
 
-  assignHomes: function(){
-
-    for(var i = 0, ii = this.empires.length; i<ii; i++){
-      this.empires.at(i).addSystem(this.systems.at(i));
-    }
-
-  },
   initEmpires: function(){
     while(this.empires.length < this.empireCount){
       this.addEmpire();
@@ -146,6 +137,14 @@ var Universe = Backbone.Model.extend({
   },
 
   initSystems: function(){
+    // create system for each empire
+    var self = this;
+    this.empires.each( 
+      function(empire){
+        empire.addSystem(self.addSystem());
+      });
+    
+    // create rest of systems
     while(this.systems.length < this.systemCount){
       this.addSystem();
     }
@@ -181,15 +180,13 @@ var Universe = Backbone.Model.extend({
       });
     }
 
-    console.log(d, spacing);
-
     var system = new App.Models.System({
       x:x,
       y:y,
       name: 'System ' + String(Number(this.systems.length + 1))
     });
     this.systems.add(system);
-
+    return system;
   },
 });
 
