@@ -52,7 +52,7 @@ var DeepSpaceUI = function(space){
 
   views = {
     ships: {
-      el: $('.ships'),
+      el: $('.ships')
     },
     map: {
       el: $('.map'),
