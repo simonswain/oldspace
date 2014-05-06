@@ -78,7 +78,6 @@ var System = module.exports = Backbone.Model.extend({
       x:x,
       y:y,
       name: 'Planet ' + String(Number(this.planets.length + 1)),
-    },{
       system: this
     });
     this.planets.add(planet);
