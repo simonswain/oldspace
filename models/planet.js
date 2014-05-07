@@ -17,9 +17,12 @@ var Planet = module.exports = Backbone.Model.extend({
     'name':'Unknown Planet',
     'age': 0,
     'interval': 100,
-    'x':null,
-    'y':null,
-    size: 1000,
+    'x': 0,
+    'y': 0,
+    'r': 0, // orbit radius
+    'a': 0, // orbit angle
+    'v': 0.0001, //orbital velocity in degrees
+    'size': 1000,
 
     // non-renewable raw materials
     resource: 0,
@@ -38,11 +41,24 @@ var Planet = module.exports = Backbone.Model.extend({
     credit: 0
   },
   initialize: function(opts) {
-    _.bindAll(this, 'run','stop');
+    _.bindAll(this, 'run','stop', 'physics');
+
+    var r, a, v, rr;
+    
+    r = a = v = 0;
+
+    if(opts.system){    
+      rr = opts.system.get('radius');
+      r = ((0.1 * rr) + (0.4 *random.from0to(rr))).toFixed(2),
+      a = random.from0to(360),
+      v = 0.0001 + (random.from0to(100)/10000);
+    }
 
     this.set({
       id: uuid.v4(),
-      interval: 1000 + random.from0to(5000),
+      r: r,
+      a: a,
+      v: v,
       pop: 1000 * random.from1to(10),
       size: 1000 * random.from1to(10),
       credit: 0,
@@ -53,12 +69,15 @@ var Planet = module.exports = Backbone.Model.extend({
     this.system = opts && opts.system || null;
     this.empire = null;
     this.ships = new App.Collections.Ships();
-    this.shipcost = 25;
+    this.shipcost = 1000;
     this.timer = false;
 
     this.run();
   },
   run: function(){
+    
+    this.physics();
+
     // population growth
 
     // population death
@@ -98,6 +117,30 @@ var Planet = module.exports = Backbone.Model.extend({
     }
 
     this.timer = setTimeout(this.run, this.get('interval'));
+  },
+
+  physics: function(){
+
+    var a, r, v, x, y, rr;
+
+    rr = this.system.get('radius');
+
+    a = this.get('a');
+    r = this.get('r');
+    v = this.get('v');
+    
+    a += v;
+    a = a % 360;
+
+    x = ((rr/2) + r * Math.cos(a)).toFixed(2);
+    y = ((rr/2) + r * Math.sin(a)).toFixed(2);
+
+    this.set({
+      a: a,
+      x: x,
+      y: y
+    });
+
   },
   spawnShip: function(){
 

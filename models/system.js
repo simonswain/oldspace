@@ -69,7 +69,6 @@ var System = module.exports = Backbone.Model.extend({
       name: 'Star',
       system: this
     });
-    console.log(star);
 
     this.stars.add(star);
   },
@@ -81,6 +80,14 @@ var System = module.exports = Backbone.Model.extend({
   },
 
   addPlanet: function(i){
+    var planet = new App.Models.Planet({
+      name: 'Planet ' + String(Number(this.planets.length + 1)),
+      system: this
+    });
+    this.planets.add(planet);
+  },
+
+  addPlanetXY: function(i){
 
     var self = this;
 

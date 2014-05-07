@@ -25,16 +25,17 @@ var Universe = Backbone.Model.extend({
     _.bindAll(this, 'addSystem','initSystems','render','renderSystems');
 
     this.empireCount = random.from1to(3);
+
     this.empires = new App.Collections.Empires([]);
     this.initEmpires();
 
     this.systemCount = this.empires.length + 5 + random.from1to(5);
     //this.systemCount = this.empires.length;
-
+    //this.systemCount = 1;
+    
     this.systems = new App.Collections.Systems([]);
     this.initSystems();
 
-    //this.makeG();
     this.render();
 
     console.log('=== Universe has ' + this.empires.length + ' Empires');
@@ -85,7 +86,8 @@ var Universe = Backbone.Model.extend({
     setTimeout(this.render, 1000);
 
   },
-  makeG: function(){
+  makeGrid: function(){
+    // star grid for text output
     var self = this;
     var x, xx, y, yy;
 
@@ -177,7 +179,6 @@ var Universe = Backbone.Model.extend({
         var dx = Math.abs(s.get('x') - x);
         var dy = Math.abs(s.get('y') - y);
         d = Math.sqrt((dx*dx) + (dy*dy));
-        console.log(d);
       });
     }
 
