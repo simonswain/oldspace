@@ -14,7 +14,7 @@ var sockjs_opts = {sockjs_url: "http://cdn.sockjs.org/sockjs-0.3.min.js"};
 // });
 
 // 2. Static files server
-var static_directory = new node_static.Server(__dirname);
+var static_directory = new node_static.Server(__dirname + '/public');
 
 
 module.exports = function(universe){

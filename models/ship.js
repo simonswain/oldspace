@@ -8,26 +8,34 @@ var uuid = require('node-uuid');
 
 var Ship = module.exports = Backbone.Model.extend({
   defaults: { 
+
     id: null,
     state: 'system',
     intent: 'fight',
     name:'Ship', 
-    ux:null, // universex
-    uy:null, // universey
-    x:null, // systemx
-    y:null, // systemy
-    vx: 0, 
-    vy: 0,
-    a: 0, // angle
+    
+    // position
+    ux: null, // universe x when jumping
+    uy: null, // universe y when jumping
+    x: null, // system x when in system
+    y: null, // system y when in system
+    vx: 0, // system x velocity
+    vy: 0, // system y velocity
+    a: 0, // angle ship is facing when in system
     v: 0, // velocity
-    warp: 0, // warp drive range
+    pr: null, // orbital position radius when at planet
+    pa: null, // oribital position angle when at planet
+
+    // attributes
+    jump_speed: 0, // warp drive speed
+    jump_range: 0, // warp drive range
     thrust: 1, // grav drive power
-    laser: 0, // laser power
-    range: 0, // laser range
+    laser_power: 0, // laser power
+    laser_range: 0, // laser range
     missile: 0,
     energy_max: 0,
     energy: 0,
-    recharge: 1,
+    recharge: 1, //rate of recharge
     power: 0,
     damage: 0,
     shield: 0,
@@ -42,10 +50,10 @@ var Ship = module.exports = Backbone.Model.extend({
     // ship belongs to this empire
     this.empire = opts.empire;
 
-    // ship is at this planet (starts with birth planet)
+    // ship is in orbit at this planet (starts with birth planet)
     this.planet = opts.planet;
     
-    // ship is at this system
+    // ship is in this system
     this.system = opts.planet.system;
 
     this.target_planet = null;
@@ -63,7 +71,7 @@ var Ship = module.exports = Backbone.Model.extend({
 
   },
   runPlanet: function(){
-    // things to do when the ship is on a planet
+    // things to do when the ship is locked in orbit at a planet
 
     var state = this.get('state');
     var intent = this.get('intent');
@@ -95,8 +103,6 @@ var Ship = module.exports = Backbone.Model.extend({
   runSpace: function(){
     // things to do when the ship is in deep space
 
-    
-
   },
   run: function(){
     this.ticks ++;
@@ -119,6 +125,7 @@ var Ship = module.exports = Backbone.Model.extend({
     }
     this.timer = setTimeout(this.run, this.interval);
   },
+
   stop: function(){
   },
 
@@ -126,6 +133,7 @@ var Ship = module.exports = Backbone.Model.extend({
     this.system = system;
     this.set({state: 'system'});
   },
+
   leaveSystem: function(system){
     this.system = null;
   },
@@ -134,9 +142,18 @@ var Ship = module.exports = Backbone.Model.extend({
     this.planet = planet;
     this.set({state: 'planet'});
   },
+
   leavePlanet: function(planet){
     this.planet = null;
   },
+
+  spacePhysics: function(){
+
+    // progress towards jump target. If reached, insert at edge of
+    // system, at angle of system departed from
+
+  },
+
   systemPhysics: function(){
 
     var ship = this;
@@ -207,6 +224,14 @@ var Ship = module.exports = Backbone.Model.extend({
 
       });
 
+    // if(intent === 'fight'){
+    // find enemy ships and attack
+    // }
+
+    // if(intent === 'jump'){
+    // thrust to edge of system in direction of target star (safe jump range)
+    // }
+
     // if(intent === 'planet'){
     //   // thrust towards planet
     //   // target planet
@@ -257,7 +282,11 @@ var Ship = module.exports = Backbone.Model.extend({
       vy: vy.toFixed(2),
       a: a.toFixed(2)
     });
-  }
+  },
+
+  planetPhysics: function(){
+    // orbit, space evenly with other ships in orbit
+  },
 
 });
 
