@@ -27,15 +27,51 @@ var System = module.exports = Backbone.Model.extend({
       id: uuid.v4()
     });
 
+    this.starCount = 1;
+
     this.planetCount = random.from1to(3);
     //this.planetCount = 1;
 
+    this.stars = new App.Collections.Stars();
     this.planets = new App.Collections.Planets();
     this.ships = new App.Collections.Ships();
 
+    this.initStars();
     this.initPlanets();
     //console.log( ' * ' + ' ' + this.get('name') + ' has ' + this.planets.length + ' planets')
 
+  },
+
+  initStars: function(){
+    while(this.stars.length < this.starCount){
+      this.addStar();
+    }
+  },
+
+  addStar: function(i){
+
+    // only allowing one star, in the center of the system for now,
+    // but keeping in collection to we can have more later
+
+    var self = this;
+
+    var x, y;
+
+    var d;
+    if(this.stars.length === 0){
+      x = this.get('radius')/2;
+      y = this.get('radius')/2;
+    }
+
+    var star = new App.Models.Star({
+      x:x,
+      y:y,
+      name: 'Star',
+      system: this
+    });
+    console.log(star);
+
+    this.stars.add(star);
   },
 
   initPlanets: function(){

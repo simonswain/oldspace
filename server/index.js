@@ -61,6 +61,7 @@ module.exports = function(universe){
     
     var systems = universe.systems.map(function(x){
       var r = x.toJSON();
+      r.stars = x.stars.toJSON();
       r.planets = x.planets.toJSON();
       r.ships = x.ships.toJSON();
       return r;

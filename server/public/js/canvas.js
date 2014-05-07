@@ -48,6 +48,16 @@ var DeepSpaceDataClient = function(){
 
 var DeepSpaceUI = function(space){
 
+  var hues = {
+    'O': '#9bb0ff',
+    'B': '#aabfff',
+    'A': '#cad7ff',
+    'F': '#f8f7ff',
+    'G': '#fff4ea',
+    'K': '#ffd2a1',
+    'M': '#ffcc6f'
+  };
+
   var views;
 
   views = {
@@ -129,18 +139,18 @@ var DeepSpaceUI = function(space){
       ctx.map.arc(x + radius/2, y+radius/2, radius/2, 0, 2 * Math.PI, false);
       ctx.map.strokeStyle = 'rgba(255, 255, 255, 0.2)';
       ctx.map.stroke();
-      //ctx.map.fillStyle = 'rgba(51, 51, 51, 0.5)';
-      //ctx.map.fill();
 
-      // ctx.map.rect(x, y, radius, radius);
-      // ctx.map.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-      // ctx.map.stroke();
-
-
+      _.each(system.stars, function(star){
+        console.log(star);
+        ctx.map.beginPath();
+        ctx.map.arc(localX(star.x), localY(star.y), star.size, 0, 2 * Math.PI, false);
+        ctx.map.fillStyle = hues[star.type];
+        ctx.map.fill();
+      });
 
       _.each(system.planets, function(planet){
         ctx.map.beginPath();
-        ctx.map.arc(localX(planet.x), localY(planet.y), 4, 0, 2 * Math.PI, false);
+        ctx.map.arc(localX(planet.x), localY(planet.y), 2, 0, 2 * Math.PI, false);
         ctx.map.fillStyle = '#090';
         ctx.map.fill();
       });

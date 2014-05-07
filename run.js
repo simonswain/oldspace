@@ -10,6 +10,7 @@ var cls = function(){
 };
 
 var App;
+
 App = {
   Models: require('./models'),
   Collections: require('./collections')
